@@ -13,9 +13,25 @@ Route::post('/register', 'Auth\RegisterController@create');
 
  
 
-Route::get('/admin', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
- 
+Route::get('estados/pais/{id}', 'ClienteController@getEstadosByPais');
+Route::get('ciudades/estado/{id}', 'ClienteController@getCiudadesByEstado');
+
+
+
+
+
+Route::resource('clientes', 'ClienteController');
+
+
+
+
+
+
+
+
+
 
 
 Route::get('admin/importar', 'ProductosPrecioController@importar');

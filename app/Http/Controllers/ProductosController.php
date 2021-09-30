@@ -6,6 +6,10 @@ use App\Producto;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+
+
+use Validator;
 
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,7 +28,38 @@ class ProductosController extends Controller
         //$this->foo = $foo;
     }
 
- 
+    public  function store(Request $request )
+    {
+        $request->validate([
+        "nombre" =>"required|min:3|max:200",
+        "cantidad_min" =>"required",
+        "controlado" =>"required",
+        ],
+        ["nombre"   =>"Ingrese alguna nombre",
+        "cantidad_min"   =>"Ingrese una cantidad minima",
+        "controlado"   =>"Ingrese si es un producto controlado"
+        ]);
+
+        $producto = new Producto();
+
+        $producto = trim($request->get('nombre'));
+         
+        $producto = trim($request->get('cantidad_min'));
+        $producto = trim($request->get('controlado'));
+        $producto = trim($request->get('existencia'));
+        $producto = trim($request->get('isv'));
+        $producto = trim($request->get('descuento_id'));
+        $producto = trim($request->get('presentacion_id'));
+        $producto = trim($request->get('estante_id'));
+//        $producto = trim($request->get('componente_id'));
+        //$producto = trim($request->get('prod_estado'));
+        //$producto = trim($request->get('existenciaID'));
+
+
+    }
+
+
+
 
     public function importExcel(Request $request)
     {
@@ -72,6 +107,24 @@ class ProductosController extends Controller
         }
 
     }
+
+
+    public function ObtenerProductosEmpresa(Request $request)
+    {
+                        
+        $productos = Producto::where('pp_nombre', 'LIKE', '%' . trim($request->input('palabra')). '%')->orderBy('pp_precio', 'asc')->get();
+ 
+
+
+
+
+           // $productos = Producto::where('empr_id', $request->empresa_id)->get();
+
+            return $productos;
+
+        
+    }
+
 
 
 }

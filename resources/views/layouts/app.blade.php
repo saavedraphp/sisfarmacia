@@ -210,6 +210,21 @@
 
 
                             <li class="nav-item">
+                                <a href="/clientes"
+                                    class="{{ Request::path() === 'clientes' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-plus-circle"></i>
+                                    <p>
+                                        Clientes
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>
+
+
+
+                            <li class="nav-item">
                                 <a href="/admin/importar"
                                     class="{{ Request::path() === 'importar' ? 'nav-link active' : 'nav-link' }}">
                                     

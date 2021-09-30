@@ -24,7 +24,7 @@ class UsuarioFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' =>'required',
+            'nombre' =>'required|min:3',
             'email' =>'required|email',
             'direccion' =>'required|min:3|max:100',
             'cbo_pais' => 'required|integer|not_in:0',
@@ -33,9 +33,16 @@ class UsuarioFormRequest extends FormRequest
             'zip' =>'required|min:3|max:5'];
 
     }
+
+    public function messages()
+    {
+        return
+        [
+        "nombre" => "El Nombre tiene que tener almenos :min Caracteres.",
+        "email.min" => "El Correo tiene que tener almenos :min Caracteres.",
+        "direccion.required" => "Ingrese alguna direccion"
+        ];
+    }
  
 }
-
-//,'fechaNacimiento' => 'required|date|date_format:m/d/Y'
-//    'usua_email' =>'required|email:255|unique:usuarios'
-            //
+ 

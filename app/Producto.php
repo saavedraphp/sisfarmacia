@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Producto extends Model
 {
     use SoftDeletes;
-    protected $table = 'productos_precio';
-    protected $primaryKey = 'id';
+    protected $table = 'productos';
+    protected $primaryKey = 'prod_id';
+    
+    protected $attributes =['pp_estado' => 'ACTI']; 
 
+/*
     protected $fillable = [
     'prov_code',
     'pp_nombre',
@@ -19,5 +22,7 @@ class Producto extends Model
     'pp_composicion',
     'pp_precio',
     'pp_fecha'];
+    */
+
     
 }
