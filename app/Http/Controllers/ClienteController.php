@@ -106,10 +106,7 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
- 
-        // echo 'valor nombre->'.$request->get('nombre');
- 
-       $validator = $request->validate([
+        $validator = Validator::make($request->all(),[
             "nombre"  => "required|min:10|max:200",
             "email"=> "required|min:10",
             "direccion" => "nullable"
@@ -120,19 +117,32 @@ class ClienteController extends Controller
 
         ]);
 
-        $cliente                 = new Cliente();
-        $cliente->nombre    = $request->get('nombre');
-        $cliente->email     = $request->get('email');
-        $cliente->direccion = $request->get('direccion');
-        $cliente->telefono = $request->get('telefono');
-        $cliente->pais_id = $request->get('pais_id');
-        $cliente->estado_id = $request->get('estado_id');
-        $cliente->ciudad_id = $request->get('ciudad_id');
-        $cliente->estado = 'ACTI';
 
-        $cliente->f_nacimiento = date_create();
-        
-        $cliente->save(); 
+    
+        if ($validator->fails() == false)
+        {
+            $cliente            = new Cliente();
+            $cliente->nombre    = $request->get('nombre');
+            $cliente->email     = $request->get('email');
+            $cliente->direccion = $request->get('direccion');
+            $cliente->telefono = $request->get('telefono');
+            $cliente->pais_id = $request->get('pais_id');
+            $cliente->estado_id = $request->get('estado_id');
+            $cliente->ciudad_id = $request->get('ciudad_id');
+            $cliente->estado = 'ACTI';
+    
+            $cliente->f_nacimiento = date_create();
+            
+            $cliente->save(); 
+            return response()->json($validator->messages(), 200);
+
+        }
+        else
+        {
+
+            return response()->json(['errors' => $validator->errors(), 'status' => 400],400);
+
+        }
 
 
      }

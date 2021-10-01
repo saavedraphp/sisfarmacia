@@ -24,13 +24,14 @@ class ProductosController extends Controller
     public function __construct()
     {
         // LSL PARA LA VALIDACION
-        $this->middleware('auth');
+        //$this->middleware('auth');
         //$this->foo = $foo;
     }
 
     public  function store(Request $request )
     {
-        $request->validate([
+        $validator = Validator::make($request->all(),
+        [
         "nombre" =>"required|min:3|max:200",
         "cantidad_min" =>"required",
         "controlado" =>"required",
@@ -40,21 +41,36 @@ class ProductosController extends Controller
         "controlado"   =>"Ingrese si es un producto controlado"
         ]);
 
-        $producto = new Producto();
 
-        $producto = trim($request->get('nombre'));
-         
-        $producto = trim($request->get('cantidad_min'));
-        $producto = trim($request->get('controlado'));
-        $producto = trim($request->get('existencia'));
-        $producto = trim($request->get('isv'));
-        $producto = trim($request->get('descuento_id'));
-        $producto = trim($request->get('presentacion_id'));
-        $producto = trim($request->get('estante_id'));
-//        $producto = trim($request->get('componente_id'));
-        //$producto = trim($request->get('prod_estado'));
-        //$producto = trim($request->get('existenciaID'));
+        if ($validator->fails() == false) {
+            $producto = new Producto();
 
+            $producto = trim($request->get('nombre'));
+             
+            $producto = trim($request->get('cantidad_min'));
+            $producto = trim($request->get('controlado'));
+            $producto = trim($request->get('existencia'));
+            $producto = trim($request->get('isv'));
+            $producto = trim($request->get('descuento_id'));
+            $producto = trim($request->get('presentacion_id'));
+            $producto = trim($request->get('estante_id'));
+    //        $producto = trim($request->get('componente_id'));
+            //$producto = trim($request->get('prod_estado'));
+            //$producto = trim($request->get('existenciaID'));
+    
+            $producto->save(); 
+            
+            return response()->json($validator->message(),200);
+            
+        }
+        else
+        {
+            return response()->json(['errors' => $validator->errors(), 'status' =>400],400);
+            
+
+        }
+
+       
 
     }
 

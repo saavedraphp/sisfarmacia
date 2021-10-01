@@ -23,6 +23,7 @@ Route::get('ciudades/estado/{id}', 'ClienteController@getCiudadesByEstado');
 
 
 Route::resource('clientes', 'ClienteController');
+Route::resource('productos', 'ProductosController');
 
 
 

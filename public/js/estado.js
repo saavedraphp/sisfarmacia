@@ -118,7 +118,7 @@ const app = new Vue({
                 }
  
                 
-              console.log(cliente)
+            
               const response =  await axios.post(`http://127.0.0.1:8080/clientes`,  cliente )
               //alert('redirecciona');
               window.location.href = 'http://127.0.0.1:8080' +'/clientes';
@@ -138,10 +138,11 @@ const app = new Vue({
                
                // e.preventDefault();
             } catch (error) {
+                console.log('entro al catch');
                 alert(error.response.data.errors.nombre)
                 // this.errores = error.response.data.errors;
                  
-                console.log(error.response.data);
+                console.log(error);
  
             }
 
