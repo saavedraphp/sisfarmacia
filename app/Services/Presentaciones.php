@@ -8,10 +8,10 @@ class Presentaciones
 {
     public function get()
     {
-        $resultados        = Presentacion::get();
+        $filas        = Presentacion::get();
         $array[''] = 'Seleccione una Presentacion';
-        foreach ($resultados as $data) {
-            $array[$data->pres_id] = $data->pres_nombre;
+        foreach ($filas as $fila) {
+            $array[$fila->pres_id] = $fila->pres_nombre;
         }
         return $array;
     }

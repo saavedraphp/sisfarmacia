@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Estado;
 use App\Ciudad;
 use App\Http\Requests\UsuarioFormRequest;
-use Validator;
+
+use Illuminate\Support\Facades\Validator;
 use Response;
 use App\Pais;
 use App\Cliente;
@@ -21,14 +22,14 @@ class ClienteController extends Controller
     public function __construct()
     {
         // LSL PARA LA VALIDACION
-        $this->middleware('auth');
+        //$this->middleware('auth');
         //$this->foo = $foo;
     }
 
 
     public function exportarPdf()
     {
-        $users = Usuario::get();
+        $users = Cliente::get();
         $pdf = PDF::loadView('pdf.listUser',compact('users'));
 
         return $pdf->download('user-list.pdf');
@@ -78,7 +79,8 @@ class ClienteController extends Controller
             return view('clientes.index', ['clientes' => $clientes, 'search' => $query]);
 
         }
-        //$usuarios = Usuario::all();
+        else
+        $clientes = Cliente::all();
         return view('clientes.index',['clientes' => $clientes]);
     }
 
@@ -126,15 +128,17 @@ class ClienteController extends Controller
             $cliente->email     = $request->get('email');
             $cliente->direccion = $request->get('direccion');
             $cliente->telefono = $request->get('telefono');
+            $cliente->dni = $request->get('dni');
             $cliente->pais_id = $request->get('pais_id');
             $cliente->estado_id = $request->get('estado_id');
             $cliente->ciudad_id = $request->get('ciudad_id');
+
             $cliente->estado = 'ACTI';
     
             $cliente->f_nacimiento = date_create();
             
             $cliente->save(); 
-            return response()->json($validator->messages(), 200);
+            return response()->json(['errors' => $validator->errors(), 'status' => 200],200);
 
         }
         else
@@ -167,7 +171,7 @@ class ClienteController extends Controller
     public function update(UsuarioFormRequest $request, $id)
     {
 
-        $usuario                 = Usuario::findOrFail($id);
+        $usuario                 = Cliente::findOrFail($id);
         $usuario->usua_nombre    = $request->get('nombre');
         $usuario->usua_email     = $request->get('email');
         $usuario->usua_direccion = $request->get('direccion');

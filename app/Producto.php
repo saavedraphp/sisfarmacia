@@ -11,7 +11,7 @@ class Producto extends Model
     protected $table = 'productos';
     protected $primaryKey = 'prod_id';
     
-    protected $attributes =['pp_estado' => 'ACTI']; 
+    protected $attributes =['prod_estado' => 'ACTI']; 
 
 /*
     protected $fillable = [
@@ -24,5 +24,9 @@ class Producto extends Model
     'pp_fecha'];
     */
 
+    public function fabricante()
+    {
+        return $this->hasOne(Fabricante::class,'fabr_id','fabricante_id');
+    }
     
 }

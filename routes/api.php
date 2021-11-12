@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 //Route::post('clientes', 'ClienteController@store');
 Route::post('apiclientes', 'ClienteController@store');
 Route::post('apiProducto', 'ProductosController@store');
+Route::post('apiFabricante', 'FabricanteController@store');
 
 
 

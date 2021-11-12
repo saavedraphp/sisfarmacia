@@ -24,8 +24,12 @@ Route::get('ciudades/estado/{id}', 'ClienteController@getCiudadesByEstado');
 
 Route::resource('clientes', 'ClienteController');
 Route::resource('productos', 'ProductosController');
+Route::resource('fabricantes', 'FabricanteController');
 
 
+
+
+Route::get('dni','ProductosController@dni');
 
 
 

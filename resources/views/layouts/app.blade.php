@@ -222,6 +222,19 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item">
+                                <a href="/productos"
+                                    class="{{ Request::path() === 'productos' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-plus-circle"></i>
+                                    <p>
+                                        Productos
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>                            
+
 
 
                             <li class="nav-item">

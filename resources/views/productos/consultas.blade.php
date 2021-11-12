@@ -233,28 +233,16 @@ const app = new Vue({
     data: {
         bug: true,
         v_total:"0.00",
-
         query:'',
-
         search_data:[],
-
         temp:[],
-
         v_cantidad: '',
-
         cancelar: null,
-
         lista:[],
-
-
-        
         temp:[],
-
         v_cantidad: '',    
 
-          
-
-    },
+     },
 
     created: function () {
     // `this` hace referencia a la instancia vm
@@ -427,52 +415,14 @@ const app = new Vue({
         
 
         if(event.keyCode==27)
-
         {
-
-          this.search_data = [];
-
-           //alert(event.keyCode);
-
+          this.search_data = []; 
           return;
 
         }
 
         else
-
         { 
-
-
-
-          /** /
-
-                  if (cancel !== undefined) {
-
-              cancel();
-
-            }
-
-            axios.post(URL, reqBody, {
-
-                cancelToken: new CancelToken(function executor(c) {
-
-                  cancel = c;
-
-                }),
-
-              })
-
-              .then((response) => {
-
-                //responce Body
-
-              })
-
-          /**/
-
-          //const cancelTokenSource = axios.CancelToken.source();
-
-          //cancelToken: cancelTokenSource.token
 
             console.log('cancelo',this.cancelar,CancelToken);
 
@@ -498,15 +448,7 @@ const app = new Vue({
 
                     ).then((response) => {
 
-
-
-                    // Cancel request
-
-                  //cancelTokenSource.cancel();
-
-
-
-                  this.search_data = response.data;
+                   this.search_data = response.data;
 
                   this.cancelar = null;
 

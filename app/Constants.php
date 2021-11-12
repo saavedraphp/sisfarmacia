@@ -14,5 +14,6 @@ class Constants {
 
    const ASIGNAR_CASILLAS = 'Casillas';
    const IMG_REPORTE = 'Imagen Reporte';
+   const DOMINIO = 'http://127.0.0.1:8080';
 
 }
