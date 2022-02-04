@@ -4,6 +4,7 @@
 
 
 @inject('paises','App\Services\Paises')
+@inject('documentos','App\Services\Documentos')
  
 <div class="container">
 
@@ -25,83 +26,114 @@
 <form action="/clientes" method="POST" id="frm_formulario"  > 
 @csrf
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">Nombre</label>
+  <?php //echo @$cliente?>
+    <div class="form-group col-md-4">
+    <input type="hidden"  class="form-control" v-model="id" name="id" id="id"  value="{{@$cliente->id}}">
+
+            <label for="cbo_presentacion">Tipo Documento *</label>
+            <span class="text-danger"  v-if="errores.documentos.length>0"> @{{errores.documentos}}  </span>
+
+            <select class="form-control" aria-label="Default select example" name="tipo_documento_id" id="tipo_documento_id" v-model="tipo_documento_id" >
+              {{$guion =""}}
+              @foreach ($documentos->get() as $index => $value)
+              <option value="{{$index}}" <?php if(@$cliente->documento_identidad_id==$index) echo 'selected'?> >{{$index.$guion.$value}}</option>
+              <?php $guion =" - "?>
+              @endforeach
+            </select>
+
+     </div>
+
+     <div class="form-group col-md-4">
+      <label for="inputEmail4">Numero Documento </label>
+       <span class="text-danger"  v-if="errores.numero_documento.length>0"> @{{errores.numero_documento}}  </span>
+      <input type="text" v-model="numero_documento"  class="form-control" name="numero_documento" id="numero_documento" 
+      placeholder="Numero Documento" value="{{@$cliente->nro_documento}}" >
+    </div>
+
+
+    <div class="form-group col-md-4">
+      <label for="inputEmail4">Nombre legal </label>
        <span class="text-danger"  v-if="errores.nombre.length>0"> @{{errores.nombre}}  </span>
-      <input type="text" v-model="nombre"  class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{old('nombre')}}">
+      <input type="text" v-model="nombre"  class="form-control" name="nombre" id="nombre" placeholder="Nombre"
+       value="{{@$cliente->nombre}}">
     </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Email</label>
-      <span class="text-danger"  v-if="errores.email.length>0"> @{{errores.email}}  </span>
-      <input type="text" v-model="email" class="form-control" name="email" id="inputPassword4" placeholder="Email" value="{{old('email')}}">
-    </div>
+
   </div>
-
-  <div class="form-group">
-    <label for="inputAddress">Direccion</label>
-    <input type="text"  v-model="direccion" class="form-control" id="inputAddress" placeholder="Direccion" name="direccion" value="{{old('direccion')}}">
-  </div>
-
-
+  
   <div class="form-row">
-    <div class="form-group col-md-4" id="div_pais">
-      <label for="inputCity">Pais</label>
-      <select v-model="selected_pais" id="pais" data-old="{{old('cbo_pais')}}"
-      @change="loadStates" name="cbo_pais"  class="form-control">
-        @foreach ($paises->get() as $index => $value)
-          <option value="{{$index}}" >{{$value}}</option>
-        @endforeach
-      </select>
 
+      <div class="form-group col-md-8">
+        <label for="inputAddress">Direccion</label>
+        <input type="text"  v-model="direccion" class="form-control" id="direccion" placeholder="Direccion" name="direccion"
+        value="{{@$cliente->direccion}}">
+      </div>
+      
+      
+      <div class="form-group col-md-4">
+          <label for="inputZip">Tipo</label>
+          <span class="text-danger"  v-if="errores.tipo_cliente.length>0"> @{{errores.tipo_cliente}}  </span>
 
-    </div>
+          <select class="form-control" aria-label="Default select example" name="tipo_cliente_id" id="tipo_cliente_id"  
+          v-model="tipo_cliente_id">
+                  <option value="selected">Seleccione Tipo</option>
+                  <option value="CLIENTE" <?php if(@$cliente->tipo_cliente=='CLIENTE') echo 'selected'?>>Cliente</option>
+                  <option value="PROVEEDOR" <?php if(@$cliente->tipo_cliente=='PROVEEDOR') echo 'selected'?>>Proveedor</option>
+                  <option value="CLIENTE/PROVEEDOR" <?php if(@$cliente->tipo_cliente=='CLIENTE/PROVEEDOR') echo 'selected'?>>Cliente/Proveedor</option>
+                  
+                  
+          </select>    
+      </div>
 
-
-    <div class="form-group col-md-4">
-      <label for="inputCity">Estado</label>
-
-       <select v-model="selected_estado" id="estado" data-old="{{old('cbo_estado')}}"  
-       @change="loadcity" name="cbo_estado" class="form-control" >
-        <option value="">Selecciona una Estado</option>
-        <option v-for="(state, index) in states" v-bind:value="index">@{{state}}</option>
-        </select>
-
-    </div>
-
-    <div class="form-group col-md-4">
-      <label for="inputState">Ciudad</label>
-     
-      <select  v-model="selected_city"  id="ciudad" data-old="{{old('cbo_ciudad')}}"  
-       name="cbo_ciudad" class="form-control" >
-
-       <option value="">Selecione un Ciudad</option>
-       <option  v-for="(city, index) in cities" v-bind:value="index">
-         @{{city}} </option>
-      </select>
-    </div>
   </div>
 
+ 
+  
+  <div class="form-row">
+    
+    <div class="form-group col-md-4">
+      <label for="inputZip">Teléfono</label>
+        <input type="text" v-model="telefono" class="form-control" placeholder="Telefono"  id="telefono" name="telefono"
+        value="{{@$cliente->telefono}}">
+      </div>
 
-   <div class="form-group">
-    <label for="inputZip">Teléfono</label>
-      <input type="text" v-model="telefono" class="form-control" id="telefono" name="telefono">
-    </div>
+
+    <div class="form-group col-md-4">
+        <label for="inputPassword4">Email</label>
+        <span class="text-danger"  v-if="errores.email.length>0"> @{{errores.email}}  </span>
+        <input type="text" v-model="email" class="form-control" name="email" id="email" placeholder="Email" value="{{@$cliente->email}}">
+      </div>
+
+
+      <div class="form-group col-md-4">
+            <label for="inputZip">Genero</label>
+            <select class="form-control" aria-label="Default select example" name="genero_id" id="genero_id" 
+            v-model="genero_id">
+                    <option value="Select">Seleccione Genero</option>
+                    <option value="F" <?php if(@$cliente->genero=='F') echo 'selected'?>>Femenino</option>
+                    <option value="M" <?php if(@$cliente->genero=='M') echo 'selected'?>>Masculino</option>
+                    
+            </select>
+      </div>
+ 
+
+  </div>
+ 
 
 
 
 
 
   <div class="form-group">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="gridCheck">
-      <label class="form-check-label" for="gridCheck">
-        Check me out
-      </label>
-    </div>
+          <label for="inputEmail4">Comentario</label>
+          <textarea class="form-control" id="comentario" name="comentario" rows="3" placeholder="Comentario"
+          v-model="comentario">{{@$cliente->comentario}}</textarea>
   </div>
 
 
-  <button type="button" @click="checkForm()" class="btn btn-primary">Registrar</button>
+ 
+
+
+  <button type="button" @click="checkForm()" class="btn btn-primary"><?php echo $valores['grabar']?></button>
   <button type="reset" class="btn btn-danger">Cancelar</button>
 
 </form>

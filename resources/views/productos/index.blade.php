@@ -4,7 +4,7 @@
 
 <div class="container" id="container">
 <h2>Lista de Productos 
-  <a href="productos/create"> <button type="button" class="btn btn-success float-right">Adicionar</button></a>
+  <a href="productos/create"> <button type="button" class="btn btn-success float-right">Nuevo Producto</button></a>
   
 
 </h2>
@@ -49,7 +49,7 @@
       <th scope="row"> @{{producto.prod_id }} </th>
       <td>@{{producto.prod_nombre}}</td>
       <td>@{{producto.prod_existencia}}</td>
-      <td>@{{producto.prod_precio}}</td>
+      <td>@{{producto.prod_precio_venta}}</td>
       <td>@{{producto.fabricante.fabr_nombre}}</td>
 
       <td>

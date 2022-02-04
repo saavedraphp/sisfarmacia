@@ -2,17 +2,22 @@
 
 namespace App\Services;
 
-use App\Documento;
+use App\DocumentoIdentidad;
 
 class Documentos
 {
     public function get()
     {
-        $documentos        = Documento::get();
-        $empresaArray[''] = 'Seleccione un Tipo de Documento';
-        foreach ($documentos as $documento) {
-            $empresaArray[$documento->tipo_docu_id] = $documento->tipo_docu_nombre;
+ 
+
+        $result        = DocumentoIdentidad::get();
+        $Array[''] = 'Seleccione un tipo Documento';
+        foreach ($result as $value) {
+            $Array[$value->id] = $value->documento;
         }
-         return $empresaArray;
+        return $Array;
+
+
+       
     }
 }

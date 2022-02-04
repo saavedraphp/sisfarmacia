@@ -1,102 +1,76 @@
 const app = new Vue({
     el: '#frm_formulario',
     data: {
-        selected_pais: '',
-        selected_estado: '',
-        selected_city: '',
-        states: [],
-        cities: [],
-        nombre:'',
-        email:'',
-        direccion:'',
-        telefono:'',
+        id:document.getElementById("id").value,
+        tipo_documento_id:document.getElementById("tipo_documento_id").value,
+        numero_documento:document.getElementById("numero_documento").value,
+
+        nombre:document.getElementById("nombre").value,
+        direccion:document.getElementById("direccion").value,
+        tipo_cliente_id:document.getElementById("tipo_cliente_id").value,
+
+        telefono:document.getElementById("telefono").value,
+        email:document.getElementById("email").value,
+        genero_id:document.getElementById("genero_id").value,
+        comentario:document.getElementById("comentario").value,
+
         //errores:[],
-        errores:{nombre:'',email:''},
+        errores:{nombre:'',email:'',documentos:'',tipo_cliente:'',numero_documento:'',comentario:''},
         salir:false
         
     },
 
-    mounted(){
-        
-        document.getElementById('estado').disabled  = true;
-        document.getElementById('ciudad').disabled  =true;
-        this.selected_pais = document.getElementById('pais').getAttribute('data-old');
-        
-      
-        if(this.selected_pais !='')
-        {
-            this.loadStates();
-           
-        }
-
-        this.selected_estado = document.getElementById('estado').getAttribute('data-old');
-        if(this.selected_estado !='')
-        { 
-            this.loadcity();
-        }        
-        
-        this.selected_estado = document.getElementById('estado').getAttribute('data-old');
-        this.selected_city = document.getElementById('ciudad').getAttribute('data-old');               
-    },
-
+  
      methods: {
-        loadStates() {
+   
+        reiniciar:function(){
+            this.errores.nombre = '',
+            this.errores.email = '',
+            this.errores.documentos ='',
+            this.errores.tipo_cliente ='',
+            this.errores.numero_documento =''
 
-            this.selected_estado ='';
-            
-            document.getElementById('estado').disabled  =true;
-            document.getElementById('ciudad').disabled  =true;
-            
-
-            if (this.selected_pais !="") {
-              
-                axios.get(`http://127.0.0.1:8080/estados/pais/id`, {params: {pais_id: this.selected_pais} }).then((response) => {
-               // axios.get(`http://demo.modifiedpayments.com/estados/pais`, {params: {pais_id: this.selected_pais} }).then((response) => {                    
-                this.states = response.data;
-                this.cities=[];
-                
-                document.getElementById("ciudad").options.selectedIndex  = 0;
-                document.getElementById('estado').disabled  =false;
-
-
-                });
-            }
-            
         },
-
-
-        loadcity() {
-
-            this.selected_city ='';
-            document.getElementById('ciudad').disabled  =true;
-
-            if (this.selected_estado !="") {
-                axios.get(`http://127.0.0.1:8080/ciudades/estado/id`, {params: {estado_id: this.selected_estado} }).then((response) => {
-               // axios.get(`http://demo.modifiedpayments.com/ciudades/estado`, {params: {estado_id: this.selected_estado} }).then((response) => {
-                this.cities = response.data;
-                document.getElementById('ciudad').disabled  =false;
-
-                });
-            }
-            
-        },
-
-
-
+  
+ 
         async checkForm (e) {
             this.salir=false;
+            this.reiniciar();
+
+            if (!this.tipo_documento_id || this.tipo_documento_id=="selected") {
+                this.errores.documentos = 'Requerido.';
+                  this.salir = true;
+            } 
+              
+            if (!this.numero_documento) {
+                this.errores.numero_documento = 'Requerido.';
+                this.salir = true;
+            }         
+
+
+            
+            if (!this.tipo_cliente_id || this.tipo_cliente_id=="selected") {
+                this.errores.tipo_cliente = 'Requerido.';
+                  this.salir = true;
+            } 
+
 
             if (!this.nombre) {
-              this.errores.nombre = 'El nombre  es obligatorio.';
+              this.errores.nombre = 'Requerido.';
               this.salir = true;
             }
      
             if(this.validEmail(this.email)==false)
             {
-                this.errores.email= 'Por favor verifique el formato de correo.';
+                this.errores.email= 'Requerido.';
                 this.salir =true;
                 
             }
+
+ 
+
+
+
 
             if (this.salir ==true) {
             return true;
@@ -107,36 +81,31 @@ const app = new Vue({
             
             try {
                 
-                let cliente  ={
+                let parametros  ={
+                    documento_identidad_id:this.tipo_documento_id,
+                    nro_documento:this.numero_documento,
                     nombre:this.nombre,
-                    email:this.email,
                     direccion:this.direccion,
+                    tipo_cliente:this.tipo_cliente_id,
                     telefono:this.telefono,
-                    pais_id:this.selected_pais,
-                    estado_id:this.selected_estado,
-                    ciudad_id:this.selected_city
+                    email:this.email,
+                    genero:this.genero_id, 
+                    comentario:this.comentario
+                    
                 }
  
                 
-            
-              const response =  await axios.post(`http://127.0.0.1:8080/clientes`,  cliente )
-              //alert('redirecciona');
-              window.location.href = 'http://127.0.0.1:8080' +'/clientes';
-                 /*   
-                if((response.data.estado) =='400')
-                {
-                    alert('Ocurrio un error al conectarse con el servidor');
-                }else
-                {
-
-                    
-
-                }
-
+                let ruta =  'http://127.0.0.1:8080';
+ 
+                if(this.id>0)
+                    response =  await axios.put(`http://127.0.0.1:8080/clientes/`+this.id,  parametros )
+                else
+                  response =  await axios.post(`http://127.0.0.1:8080/clientes`,  parametros )
         
-                    */
-               
-               // e.preventDefault();
+        
+                window.location.href = ruta +'/clientes';
+        
+ 
             } catch (error) {
                 console.log('entro al catch');
                 alert(error.response.data.errors.nombre)

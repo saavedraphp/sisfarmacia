@@ -22,32 +22,35 @@ class ProductosController extends Controller
     public function __construct()
     {
         // LSL PARA LA VALIDACION
-        $this->middleware('auth');
+       // $this->middleware('auth');
         //$this->foo = $foo;
     }
 
     public function index(Request $request)
     {
+       // DB::enableQueryLog();
         if ($request) {
             $query = trim($request->get('search'));
             $productos = Producto::where('prod_nombre', 'LIKE', '%' . $query . '%')->orderBy('prod_nombre', 'asc')->paginate(10);
         } else
             $productos = Producto::all();
 
+         //   dd(DB::getQueryLog());
         return view('productos.index', ['productos' => $productos, 'search' => $query]);
     }
 
     public function create()
     {
-
-        return view('productos.create');
+        $valores['grabar']= 'Grabar';
+        return view('productos.create',['valores' => $valores]);
     }
 
 
 
     public function edit($id)
     {
-       return view('productos.edit', ['producto' => Producto::findOrFail($id)]);
+        $valores['grabar']= 'Actualizar';
+       return view('productos.create', ['producto' => Producto::findOrFail($id),'valores' => $valores]);
        
     }
 
@@ -77,8 +80,14 @@ class ProductosController extends Controller
         if ($validator->fails() == false) {
             $producto = Producto::findOrFail($id);
 
+            
             $producto->prod_nombre = strtoupper(trim($request->get('nombre')));
-            $producto->prod_precio = (float)$request->get('precio');
+            $producto->prod_precio_venta = (float)$request->get('precio');
+            $producto->prod_igv    = (float)$request->get('precio') * 0.18;
+            $producto->prod_descuento = (int)trim($request->get('descuento'));
+            $producto->categoria_id = (int)trim($request->get('categoria_id'));
+
+
             $producto->fabricante_id = (int)($request->get('fabricante_id'));
             $producto->prod_comentario = trim($request->get('comentarios'));
             $producto->prod_ean = trim($request->get('ean'));
@@ -88,12 +97,9 @@ class ProductosController extends Controller
             $producto->prod_cantidad_min = (int)trim($request->get('cantidad_min'));
             $producto->prod_controlado = (int)trim($request->get('controlado'));
             $producto->prod_existencia = (int)trim($request->get('existencia'));
-            $producto->isv              = trim($request->get('isv'));
-            $producto->descuento_id = (int)trim($request->get('descuento_id'));
             $producto->presentacion_id = (int)trim($request->get('presentacion_id'));
-            $producto->estante_id = (int)trim($request->get('estante_id'));
+            if(!empty($producto->prin_acti_id))
             $producto->prin_acti_id = (int)trim($request->get('prin_acti_id'));
-            $producto->tipo_prod_id = (int)trim($request->get('tipo_prod_id'));
 
 
 
@@ -129,7 +135,13 @@ class ProductosController extends Controller
             $producto = new Producto();
 
             $producto->prod_nombre = strtoupper(trim($request->get('nombre')));
-            $producto->prod_precio = (float)$request->get('precio');
+            $producto->prod_precio_venta = (float)$request->get('precio');
+            $producto->prod_igv    = (float)$request->get('precio') * 0.18;
+            $producto->prod_descuento = (int)trim($request->get('descuento'));
+            $categoria_id = (int)$request->get('categoria_id');
+            $producto->categoria_id = isset($categoria_id)?(int)$categoria_id:"";
+    
+
             $producto->fabricante_id = (int)($request->get('fabricante_id'));
             $producto->prod_comentario = trim($request->get('comentarios'));
             $producto->prod_ean = trim($request->get('ean'));
@@ -138,17 +150,12 @@ class ProductosController extends Controller
 
             $producto->prod_cantidad_min = (int)trim($request->get('cantidad_min'));
             $producto->prod_controlado = (int)trim($request->get('controlado'));
-           // $producto->prod_existencia = trim($request->get('existencia'));
-            $producto->isv              = (int)trim($request->get('isv'));
-            $producto->descuento_id = (int)trim($request->get('descuento_id'));
+            $producto->prod_existencia = (int)trim($request->get('existencia'));
             $producto->presentacion_id = (int)trim($request->get('presentacion_id'));
-            $producto->estante_id = (int)trim($request->get('estante_id'));
+            if(!empty($producto->prin_acti_id))
             $producto->prin_acti_id = (int)trim($request->get('prin_acti_id'));
-            $producto->tipo_prod_id = (int)trim($request->get('tipo_prod_id'));
-
-
-
-
+ 
+ 
             $producto->save();
             return response()->json(['errors' => $validator->errors(), 'status' => 200], 200);
 
@@ -196,7 +203,7 @@ class ProductosController extends Controller
     {
         try {
             //        DB::enableQueryLog();
-            $productos = Producto::with('fabricante')->where('prod_nombre', 'LIKE', '%' . trim($request->input('palabra')) . '%')->orderBy('prod_precio', 'asc')->get();
+            $productos = Producto::with('fabricante')->where('prod_nombre', 'LIKE', '%' . trim($request->input('palabra')) . '%')->orderBy('prod_precio_venta', 'asc')->get();
 
             //$productos = DB::table('productos_precio')
             //              ->where('pp_nombre','LIKE','%'.trim($request->palabra).'%')->orderBy('pp_precio', 'asc')->get();

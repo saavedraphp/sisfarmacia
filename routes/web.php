@@ -25,6 +25,7 @@ Route::get('ciudades/estado/{id}', 'ClienteController@getCiudadesByEstado');
 Route::resource('clientes', 'ClienteController');
 Route::resource('productos', 'ProductosController');
 Route::resource('fabricantes', 'FabricanteController');
+Route::resource('compras', 'CompraController');
 
 
 
@@ -57,6 +58,8 @@ Route::get('admin/consultas',function(){
     });
         
 Route::get('obtenerProductos/', 'ProductosController@buscarProduco');
+Route::get('obtenerClientes/', 'ClienteController@buscarCliente');
+
 Route::get('grabarListaPedido/', 'PedidosController@grabarListaPedido');
 
 Route::resource('admin/pedidos', 'PedidosController');

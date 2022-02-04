@@ -202,31 +202,62 @@
                     <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li class="nav-item">
-                                <a href="/admin" class="{{ Request::path() === '/' ? 'nav-link active' : 'nav-link' }}">
+                                <a href="/" class="{{ Request::path() === '/' ? 'nav-link active' : 'nav-link' }}">
                                     <i class="nav-icon fas fa-home"></i>
                                     <p>Inicio</p>
                                 </a>
                             </li>
 
 
+
                             <li class="nav-item">
-                                <a href="/clientes"
-                                    class="{{ Request::path() === 'clientes' ? 'nav-link active' : 'nav-link' }}">
+                                <a href="/ventas"
+                                    class="{{ Request::path() === 'ventas' ? 'nav-link active' : 'nav-link' }}">
                                     
-                                    <i class="nav-icon fas fa-plus-circle"></i>
+                                    <i class="nav-icon fas fa-credit-card"></i>
                                     <p>
-                                        Clientes
+                                        Ventas
                                        
                                         <span class="right badge badge-danger"></span>
                                     </p>
                                 </a>
                             </li>
 
+
+                            <li class="nav-item">
+                                <a href="/compras"
+                                    class="{{ Request::path() === 'compras' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-shopping-bag"></i>
+                                    <p>
+                                    Compras
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>
+
+
+
+                            <li class="nav-item">
+                                <a href="/despachos"
+                                    class="{{ Request::path() === 'despachos' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-truck-moving"></i>
+                                    <p>
+                                    Guia de Remision
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>
+
+
                             <li class="nav-item">
                                 <a href="/productos"
                                     class="{{ Request::path() === 'productos' ? 'nav-link active' : 'nav-link' }}">
                                     
-                                    <i class="nav-icon fas fa-plus-circle"></i>
+                                    <i class="nav-icon fas fas fa-box-open"></i>
                                     <p>
                                         Productos
                                        
@@ -236,6 +267,35 @@
                             </li>                            
 
 
+
+
+                            <li class="nav-item">
+                                <a href="/clientes"
+                                    class="{{ Request::path() === 'clientes' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-id-badge"></i>
+                                    <p>
+                                        Clientes
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>
+
+
+
+                            <li class="nav-item">
+                                <a href="/cajachica"
+                                    class="{{ Request::path() === 'cajachica' ? 'nav-link active' : 'nav-link' }}">
+                                    
+                                    <i class="nav-icon fas fa-cash-register"></i>
+                                    <p>
+                                    Caja Chica
+                                       
+                                        <span class="right badge badge-danger"></span>
+                                    </p>
+                                </a>
+                            </li>                            
 
                             <li class="nav-item">
                                 <a href="/admin/importar"

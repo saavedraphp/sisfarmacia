@@ -9,28 +9,36 @@ const app2 = new Vue({
       cbo_presentacion_id:  document.getElementById("cbo_presentacion_id").value,
       v_precio:document.getElementById("precio_id").value,
       cantidad_min_id:document.getElementById("cantidad_min_id").value,
+      categoria_id:document.getElementById("categoria_id").value,
       salir: false,
-      errores:{nombre:'',presentacion:'',precio:'',fabricante:''}
+      errores:{nombre:'',presentacion:'',precio:'',fabricante:'',categoria:''}
       
     },
     methods:{
       
+      reiniciar:function(){
+        this.errores.nombre = '',
+        this.errores.presentacion = '',
+        this.errores.precio ='',
+        this.errores.fabricante ='',
+        this.categoria =''
 
+    },
 
       async checkForm (e) {
- 
+      
         this.salir =false;
-        //this.errores = [];
+        this.reiniciar();
    
         if (!this.nombre) {
           this.errores.nombre = 'Requerido.';
           this.salir = true;
         }
 
-         if (!this.cbo_presentacion_id || this.cbo_presentacion_id=="selected") {
-            this.errores.presentacion = 'Requerido.';
-            this.salir = true;
-          }        
+        if (!this.cbo_presentacion_id || this.cbo_presentacion_id=="selected") {
+          this.errores.presentacion = 'Requerido.';
+          this.salir = true;
+        }        
   
         if (this.v_precio <= 0) {
           this.errores.precio = 'Requerido.';
@@ -39,6 +47,12 @@ const app2 = new Vue({
  
         if (!this.fabricante_id || this.fabricante_id=="selected") {
           this.errores.fabricante = 'Requerido.';
+          this.salir = true;
+        }
+
+
+        if (!this.categoria_id || this.categoria_id=="selected") {
+          this.errores.categoria = 'Requerido.';
           this.salir = true;
         }
 
@@ -62,13 +76,13 @@ const app2 = new Vue({
           cantidad_min:this.cantidad_min_id,
           fabricante_id:this.fabricante_id,
           comentarios:document.getElementById("comentario_id").value,
-          presentacion_id:this.cbo_presentacion_id,          
-          isv:0.18,
+          presentacion_id:this.cbo_presentacion_id,
+          categoria_id:this.categoria_id,
           controlado:document.getElementById("controlado_id").checked
         }
     
         let ruta =  'http://127.0.0.1:8080';
-  
+
         if(this.id>0)
           response =  await axios.put(`http://127.0.0.1:8080/productos/`+this.id,  parametros )
         else
@@ -79,7 +93,7 @@ const app2 = new Vue({
 
 
       } catch (error) {
-        alert(error.response.data.errors.nombre);
+        //alert(error.response.data.errors.nombre);
         console.log(error)
       }
        // e.preventDefault();

@@ -13,6 +13,8 @@ use App\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Exception;
+
 
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -101,15 +103,15 @@ class ClienteController extends Controller
 
     public function create()
     {
-
-        return view('clientes.create');
+        $valores['grabar']= 'Grabar';
+        return view('clientes.create',['valores' => $valores]);
 
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            "nombre"  => "required|min:10|max:200",
+            "nombre"  => "required|min:3||max:200",
             "email"=> "required|min:10",
             "direccion" => "nullable"
         ],[
@@ -124,19 +126,22 @@ class ClienteController extends Controller
         if ($validator->fails() == false)
         {
             $cliente            = new Cliente();
+            $cliente->documento_identidad_id = $request->get('documento_identidad_id');
+            $cliente->nro_documento = $request->get('nro_documento');
+
             $cliente->nombre    = $request->get('nombre');
-            $cliente->email     = $request->get('email');
             $cliente->direccion = $request->get('direccion');
+            $cliente->tipo_cliente = $request->get('tipo_cliente');
+
             $cliente->telefono = $request->get('telefono');
-            $cliente->dni = $request->get('dni');
-            $cliente->pais_id = $request->get('pais_id');
-            $cliente->estado_id = $request->get('estado_id');
-            $cliente->ciudad_id = $request->get('ciudad_id');
+            $cliente->email     = $request->get('email');
+
+            $cliente->genero = $request->get('genero');
+            $cliente->comentario = $request->get('comentario');
 
             $cliente->estado = 'ACTI';
-    
             $cliente->f_nacimiento = date_create();
-            
+
             $cliente->save(); 
             return response()->json(['errors' => $validator->errors(), 'status' => 200],200);
 
@@ -161,44 +166,90 @@ class ClienteController extends Controller
     public function edit($id)
     {
     
-
-        return view('clientes.edit', ['cliente' => Cliente::findOrFail($id)]);
+        $valores['grabar']= 'Actualizar';
+        return view('clientes.create', ['cliente' => Cliente::findOrFail($id),'valores' => $valores]);
     }
 
 
     
 
-    public function update(UsuarioFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
 
-        $usuario                 = Cliente::findOrFail($id);
-        $usuario->usua_nombre    = $request->get('nombre');
-        $usuario->usua_email     = $request->get('email');
-        $usuario->usua_direccion = $request->get('direccion');
-        $usuario->pais_id        = $request->get('cbo_pais');
-        $usuario->estado_id        = $request->get('cbo_estado');
-        $usuario->ciudad_id        = $request->get('cbo_ciudad');
-        $usuario->usua_code_zip  = $request->get('zip');
-        $usuario->usua_f_nacimiento = Carbon::createFromFormat('m/d/Y', $request->get('fechaNacimiento'))->format('Y-m-d');
-        
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "nombre" => "required|min:3|max:200",
+                "documento_identidad_id" => "required"
+               
+                
+            ],
+            [
+                "nombre"   => "Ingrese algun nombre",
+                "documento_identidad_id"   => "Tiene que seleccionar una presentacion"
+                
+            ]
+        );
 
-        
-        
-        $usuario->update();
+        if ($validator->fails() == false)
+        {
+            $cliente            = Cliente::findOrFail($id);
+            $cliente->documento_identidad_id = $request->get('documento_identidad_id');
+            $cliente->nro_documento = $request->get('nro_documento');
 
-        return redirect('/usuarios');
+            $cliente->nombre    = $request->get('nombre');
+            $cliente->direccion = $request->get('direccion');
+            $cliente->tipo_cliente = $request->get('tipo_cliente');
+
+            $cliente->telefono = $request->get('telefono');
+            $cliente->email     = $request->get('email');
+
+            $cliente->genero = $request->get('genero');
+            $cliente->comentario = $request->get('comentario');
+
+             $cliente->f_nacimiento = date_create();
+
+            $cliente->save(); 
+            return response()->json(['errors' => $validator->errors(), 'status' => 200],200);
+
+        }
+        else
+        {
+
+            return response()->json(['errors' => $validator->errors(), 'status' => 400],400);
+
+        }
+
 
     }
+
+
 
     public function destroy($id)
     {
-        $cliente = Cliente::findOrFail($id);
-
-        $cliente->delete();
-
-        return redirect('/clientes');
+        return Cliente::destroy($id);
 
     }
+
+
+
+    public function buscarCliente(Request $request)
+    {
+        try {
+            //        DB::enableQueryLog();
+            $data = Cliente::where('nombre', 'LIKE', '%' . trim($request->input('palabra')) . '%')->orderBy('nombre', 'asc')->get();
+
+            //$productos = DB::table('productos_precio')
+            //              ->where('pp_nombre','LIKE','%'.trim($request->palabra).'%')->orderBy('pp_precio', 'asc')->get();
+            //dd(DB::getQueryLog());
+            return $data;
+        } catch (Exception $e) {
+            report($e);
+            return $e;
+        }
+    }
+
+
 
 }
 
